@@ -106,15 +106,25 @@ class SchemaUtils {
         log.debug("Added default schema from " + url.getPath() + " with targetNamespace " + targetNamespace);
     }
 
-    public static SchemaTypeSystem loadSchemaTypes(String wsdlUrl, SchemaLoader loader) {
+    public static SchemaTypeSystem loadSchemaTypes(String wsdlContent, SchemaLoader loader) {
         try {
-            log.debug("Loading schema types from [" + wsdlUrl + "]");
-            ArrayList<XmlObject> schemas = new ArrayList<XmlObject>(getSchemas(wsdlUrl, loader).values());
+            log.debug("Loading schema types from [" + wsdlContent + "]");
+            ArrayList<XmlObject> schemas = new ArrayList<XmlObject>(getSchemas(wsdlContent, loader).values());
             return buildSchemaTypes(schemas);
         } catch (Exception e) {
             throw new SoapBuilderException(e);
         }
     }
+
+public static SchemaTypeSystem loadSchemaTypes(String wsdlUrl,String wsdlContent, SchemaLoader loader) {
+    try {
+        log.debug("Loading schema types from [" + wsdlUrl + "]");
+        ArrayList<XmlObject> schemas = new ArrayList<XmlObject>(getSchemas(wsdlUrl, loader).values());
+        return buildSchemaTypes(schemas);
+    } catch (Exception e) {
+        throw new SoapBuilderException(e);
+    }
+}
 
     public static SchemaTypeSystem buildSchemaTypes(List<XmlObject> schemas) {
         XmlOptions options = new XmlOptions();

@@ -51,9 +51,16 @@ class UrlSchemaLoader implements SchemaLoader, DefinitionLoader {
         this.baseURI = baseURI;
     }
 
-    public XmlObject loadXmlObject(String wsdlUrl, XmlOptions options) throws Exception {
-        return XmlUtils.createXmlObject(new URL(wsdlUrl), options);
+@Override
+public XmlObject loadXmlObject(String xmlString, XmlOptions options) throws Exception {
+    return XmlUtils.createXmlObject(xmlString, options);
+}
+
+public XmlObject loadXmlObject(URL url, XmlOptions options) throws Exception {
+        return XmlUtils.createXmlObject(url, options);
     }
+    
+    
 
     public String getBaseURI() {
         return baseURI;

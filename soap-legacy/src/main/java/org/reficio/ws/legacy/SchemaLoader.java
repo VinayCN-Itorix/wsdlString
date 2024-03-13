@@ -21,6 +21,8 @@ package org.reficio.ws.legacy;
 import org.apache.xmlbeans.XmlObject;
 import org.apache.xmlbeans.XmlOptions;
 
+import java.net.URL;
+
 /**
  * This class was extracted from the soapUI code base by centeractive ag in October 2011.
  * The main reason behind the extraction was to separate the code that is responsible
@@ -42,7 +44,9 @@ import org.apache.xmlbeans.XmlOptions;
  * - minor fixes to make the class compile out of soapUI's code base
  */
 interface SchemaLoader {
-    XmlObject loadXmlObject(String wsdlUrl, XmlOptions options) throws Exception;
+    XmlObject loadXmlObject(URL url, XmlOptions options) throws Exception;
+    
+    XmlObject loadXmlObject(String xmlString,XmlOptions options) throws Exception;
 
     String getBaseURI();
 }

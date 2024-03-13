@@ -30,6 +30,7 @@ import org.reficio.ws.annotation.ThreadSafe;
 import org.reficio.ws.common.Wsdl11Writer;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+import org.xml.sax.InputSource;
 
 import javax.wsdl.*;
 import javax.wsdl.extensions.soap.SOAPBinding;
@@ -37,6 +38,7 @@ import javax.wsdl.extensions.soap12.SOAP12Binding;
 import javax.wsdl.xml.WSDLReader;
 import javax.xml.namespace.QName;
 import java.io.File;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -98,6 +100,14 @@ class SoapMessageBuilder {
         this.definition = reader.readWSDL(wsdlUrl.toString());
         this.definitionWrapper = new SchemaDefinitionWrapper(definition, wsdlUrl.toString());
     }
+
+public SoapMessageBuilder(String wsdlContent) throws WSDLException {
+    WSDLReader reader = new WSDLReaderImpl();
+    reader.setFeature("javax.wsdl.importDocuments", true);
+    InputSource ip = new InputSource(new StringReader(wsdlContent));
+    this.definition = reader.readWSDL(null,ip);
+    this.definitionWrapper = new SchemaDefinitionWrapper(definition, wsdlContent);
+}
 
     /**
      * Constructs a new SoapBuilder instance importing the wsdl from the specified wsdlUrl.

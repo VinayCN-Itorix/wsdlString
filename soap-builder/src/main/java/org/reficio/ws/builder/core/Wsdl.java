@@ -43,28 +43,36 @@ public final class Wsdl {
 
     private final URL wsdlUrl;
     private final SoapLegacyFacade soapFacade;
+    
+    private final String wsdlContent;
 
     private Wsdl(URL wsdlUrl) {
         try {
             this.wsdlUrl = wsdlUrl;
             this.soapFacade = new SoapLegacyFacade(wsdlUrl);
+            this.wsdlContent=null;
         } catch (WSDLException e) {
             throw new SoapBuilderException(e);
         }
     }
+private Wsdl(String wsdlContent) {
+    try {
+        this.wsdlUrl=null;
+        this.wsdlContent = wsdlContent;
+        this.soapFacade = new SoapLegacyFacade(wsdlContent);
+    } catch (WSDLException e) {
+        throw new SoapBuilderException(e);
+    }
+}
 
     public static Wsdl parse(URL wsdlUrl) {
         Preconditions.checkNotNull(wsdlUrl, "URL of the WSDL cannot be null");
         return new Wsdl(wsdlUrl);
     }
 
-    public static Wsdl parse(String wsdlUrl) {
-        Preconditions.checkNotNull(wsdlUrl, "URL of the WSDL cannot be null");
-        try {
-            return new Wsdl(new URL(wsdlUrl));
-        } catch (MalformedURLException e) {
-            throw new SoapBuilderException(e);
-        }
+    public static Wsdl parse(String wsdlContent) {
+        Preconditions.checkNotNull(wsdlContent, "URL of the WSDL cannot be null");
+        return new Wsdl(wsdlContent);
     }
 
     public List<QName> getBindings() {

@@ -59,6 +59,7 @@ class SchemaDefinitionWrapper {
         this.definition = definition;
         loadSchemaTypes(new UrlSchemaLoader(schemaURL));
     }
+    
 
     public SchemaTypeLoader getSchemaTypeLoader() {
         return schemaTypeLoader;
