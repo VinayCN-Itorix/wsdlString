@@ -21,6 +21,7 @@ package org.reficio.ws.legacy;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.xmlbeans.*;
+import org.apache.xmlbeans.impl.values.XmlAnyTypeImpl;
 import org.reficio.ws.SoapBuilderException;
 import org.reficio.ws.common.ResourceUtils;
 import org.w3c.dom.*;
@@ -196,7 +197,6 @@ public static SchemaTypeSystem loadSchemaTypes(String wsdlUrl,String wsdlContent
 
             SchemaTypeSystem sts = XmlBeans.compileXsd(schemas.toArray(new XmlObject[schemas.size()]),
                     XmlBeans.getBuiltinTypeSystem(), options);
-
             return sts;
             // return XmlBeans.typeLoaderUnion(new SchemaTypeLoader[] { sts,
             // XmlBeans.getBuiltinTypeSystem() });
@@ -241,7 +241,7 @@ public static SchemaTypeSystem loadSchemaTypes(String wsdlUrl,String wsdlContent
         log.debug("Getting schema " + wsdlUrl);
 
         ArrayList<?> errorList = new ArrayList<Object>();
-
+      
         Map<String, XmlObject> result = new HashMap<String, XmlObject>();
 
         boolean common = false;
@@ -252,8 +252,10 @@ public static SchemaTypeSystem loadSchemaTypes(String wsdlUrl,String wsdlContent
             options.setSaveUseOpenFrag();
             options.setErrorListener(errorList);
             options.setSaveSyntheticDocumentElement(new QName(Constants.XSD_NS, "schema"));
-
-            XmlObject xmlObject = loader.loadXmlObject(wsdlUrl, options);
+            
+            XmlAnyTypeImpl xmlAnyType = new XmlAnyTypeImpl();
+            XmlObject xmlObject= new XmlAnyTypeImpl();
+            xmlObject =loader.loadXmlObject(wsdlUrl, options);
             if (xmlObject == null)
                 throw new Exception("Failed to load schema from [" + wsdlUrl + "]");
 
@@ -293,8 +295,8 @@ public static SchemaTypeSystem loadSchemaTypes(String wsdlUrl,String wsdlContent
                     result.put(wsdlUrl, xmlObject);
             } else {
                 existing.put(wsdlUrl, null);
-
-                XmlObject[] schemas = xmlObject.selectPath("declare namespace s='" + Constants.XSD_NS + "' .//s:schema");
+                
+                 XmlObject[] schemas  =  xmlObject.selectPath("declare namespace s='" + Constants.XSD_NS + "' .//s:schema");
 
                 for (int i = 0; i < schemas.length; i++) {
                     XmlCursor xmlCursor = schemas[i].newCursor();
